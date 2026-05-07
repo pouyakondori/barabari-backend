@@ -8,3 +8,4 @@ uploads/audio/*
 !uploads/audio/.gitkeep
 .env
 *.log
+.DS_Store
