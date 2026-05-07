@@ -1,0 +1,10 @@
+node_modules/
+dist/
+uploads/images/*
+uploads/pdfs/*
+uploads/audio/*
+!uploads/images/.gitkeep
+!uploads/pdfs/.gitkeep
+!uploads/audio/.gitkeep
+.env
+*.log
