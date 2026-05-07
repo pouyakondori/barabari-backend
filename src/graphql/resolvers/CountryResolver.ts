@@ -7,10 +7,16 @@ export class CountryResolver {
   @Query(() => [CountryType])
   async countries(
     @Arg("limit", () => Int, { defaultValue: 20 }) limit: number,
-    @Arg("offset", () => Int, { defaultValue: 0 }) offset: number
+    @Arg("offset", () => Int, { defaultValue: 0 }) offset: number,
+    @Arg("search", { nullable: true }) search?: string
   ): Promise<CountryType[]> {
     const cappedLimit = Math.min(limit, 100);
-    const docs = await Country.find()
+    const filter: Record<string, unknown> = {};
+    if (search) {
+      const regex = new RegExp(search, "i");
+      filter.$or = [{ "name.en": regex }, { "name.fa": regex }, { slug: regex }];
+    }
+    const docs = await Country.find(filter)
       .sort({ "name.en": 1 })
       .skip(offset)
       .limit(cappedLimit)
