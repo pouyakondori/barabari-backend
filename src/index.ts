@@ -15,6 +15,7 @@ import { CommentResolver } from "./graphql/resolvers/CommentResolver";
 import { TopicResolver } from "./graphql/resolvers/TopicResolver";
 import { TimelineResolver } from "./graphql/resolvers/TimelineResolver";
 import { StatsResolver } from "./graphql/resolvers/StatsResolver";
+import { AdminUserResolver } from "./graphql/resolvers/AdminUserResolver";
 
 async function bootstrap() {
   // Connect to MongoDB
@@ -31,6 +32,7 @@ async function bootstrap() {
       TopicResolver,
       TimelineResolver,
       StatsResolver,
+      AdminUserResolver,
     ],
     authChecker,
     validate: true,

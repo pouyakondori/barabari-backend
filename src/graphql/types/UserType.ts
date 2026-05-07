@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID, Int } from "type-graphql";
 
 @ObjectType()
 export class UserType {
@@ -17,8 +17,26 @@ export class UserType {
   @Field()
   isVerified: boolean;
 
+  @Field({ defaultValue: false })
+  isBanned: boolean;
+
   @Field()
   createdAt: Date;
+}
+
+@ObjectType()
+export class PaginatedUsers {
+  @Field(() => [UserType])
+  items: UserType[];
+
+  @Field(() => Int)
+  total: number;
+
+  @Field(() => Int)
+  limit: number;
+
+  @Field(() => Int)
+  offset: number;
 }
 
 @ObjectType()
