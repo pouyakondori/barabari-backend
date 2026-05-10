@@ -67,8 +67,6 @@ function mapCountry(doc: any): CountryType {
     naturalResources: doc.naturalResources || [],
     authors: doc.authors || [],
     amendments: doc.amendments || [],
-    podcastUrl: doc.podcastUrl,
-    videoUrl: doc.videoUrl,
     countryCode: doc.countryCode,
     systemOfGovernment: doc.systemOfGovernment,
     hdi: doc.hdi,

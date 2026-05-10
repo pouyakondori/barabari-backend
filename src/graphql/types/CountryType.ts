@@ -92,12 +92,6 @@ export class CountryType {
   @Field(() => [AmendmentType])
   amendments: AmendmentType[];
 
-  @Field({ nullable: true })
-  podcastUrl?: string;
-
-  @Field({ nullable: true })
-  videoUrl?: string;
-
   @Field()
   countryCode: string;
 

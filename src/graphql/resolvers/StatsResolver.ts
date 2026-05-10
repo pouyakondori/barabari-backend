@@ -34,8 +34,6 @@ export class StatsResolver {
       abstract: doc.abstract,
       authors: doc.authors || [],
       amendments: doc.amendments || [],
-      podcastUrl: doc.podcastUrl,
-      videoUrl: doc.videoUrl,
       countryCode: doc.countryCode,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,

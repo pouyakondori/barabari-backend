@@ -34,8 +34,6 @@ export interface ICountry extends Document {
   naturalResources?: string[];
   authors: IAuthor[];
   amendments: IAmendment[];
-  podcastUrl?: string;
-  videoUrl?: string;
   countryCode: string;
   systemOfGovernment?: string;
   hdi?: number;
@@ -101,8 +99,6 @@ const CountrySchema = new Schema<ICountry>(
     naturalResources: { type: [String], default: [] },
     authors: { type: [AuthorSchema], default: [] },
     amendments: { type: [AmendmentSchema], default: [] },
-    podcastUrl: { type: String },
-    videoUrl: { type: String },
     countryCode: { type: String, required: true, uppercase: true },
     systemOfGovernment: { type: String },
     hdi: { type: Number },

@@ -97,14 +97,6 @@ export class CountryInput {
   @IsOptional()
   naturalResources?: string[];
 
-  @Field({ nullable: true })
-  @IsOptional()
-  podcastUrl?: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  videoUrl?: string;
-
   @Field(() => [AuthorInput], { nullable: true })
   @IsOptional()
   authors?: AuthorInput[];
