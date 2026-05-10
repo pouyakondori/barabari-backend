@@ -9,7 +9,11 @@
     "start": "node dist/index.js",
     "seed": "ts-node --swc src/seed/seed.ts",
     "lint": "eslint src/",
-    "test": "vitest"
+    "test": "vitest",
+    "migrate:up": "migrate-mongo up -f migrate-mongo-config.mjs",
+    "migrate:down": "migrate-mongo down -f migrate-mongo-config.mjs",
+    "migrate:status": "migrate-mongo status -f migrate-mongo-config.mjs",
+    "migrate:create": "migrate-mongo create -f migrate-mongo-config.mjs"
   },
   "license": "MIT",
   "engines": {
@@ -24,6 +28,7 @@
     "express": "^5.2.1",
     "graphql": "^16.14.0",
     "jsonwebtoken": "^9.0.3",
+    "migrate-mongo": "^14.0.7",
     "mongoose": "^9.6.1",
     "reflect-metadata": "^0.2.2",
     "type-graphql": "^2.0.0-rc.3"

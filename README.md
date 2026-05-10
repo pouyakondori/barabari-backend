@@ -123,6 +123,7 @@ src/
 ├── services/             # Business logic layer
 ├── routes/               # REST routes (file upload, SSE chat)
 ├── utils/                # Errors, pagination, file helpers
+├── migrations/           # Database migration scripts (migrate-mongo)
 └── seed/                 # Database seed scripts & data
 uploads/                  # Local file storage (images, PDFs, audio)
 ```
@@ -145,6 +146,73 @@ The server exposes a GraphQL endpoint at `/graphql`. Key domains:
 | Chat | — | `chat` (+ REST `POST /api/chat` for streaming) |
 | Admin | `adminStats`, `adminUsers`, `adminComments`, ... | `adminApproveComment`, `adminCreateCountry`, ... |
 
+## Database Migrations
+
+This project uses [migrate-mongo](https://github.com/seppevs/migrate-mongo) to manage all database schema changes, index modifications, and data transformations.
+
+> **⚠️ Important:** Never make changes directly on the database. Always use migrations.
+
+### Why Migrations?
+
+- **Reproducibility** — Every database change is version-controlled and can be replayed on any environment.
+- **Rollback safety** — Each migration includes a `down()` function to undo changes if needed.
+- **Team coordination** — Migrations prevent conflicts when multiple developers modify the database.
+- **Audit trail** — The `changelog` collection in MongoDB tracks which migrations have been applied and when.
+
+### Migration Commands
+
+| Command | Description |
+|---|---|
+| `npm run migrate:create <name>` | Create a new migration file in `src/migrations/` |
+| `npm run migrate:up` | Run all pending migrations |
+| `npm run migrate:down` | Rollback the last applied migration |
+| `npm run migrate:status` | Show which migrations have been applied |
+
+### Creating a Migration
+
+```bash
+# Create a new migration
+npm run migrate:create add-user-avatar-field
+```
+
+This generates a timestamped file in `src/migrations/` (e.g., `20260510120000-add-user-avatar-field.js`):
+
+```javascript
+export const up = async (db, client) => {
+  // Forward migration: apply the change
+  await db.collection("users").updateMany(
+    { avatar: { $exists: false } },
+    { $set: { avatar: null } }
+  );
+};
+
+export const down = async (db, client) => {
+  // Rollback: undo the change
+  await db.collection("users").updateMany(
+    {},
+    { $unset: { avatar: "" } }
+  );
+};
+```
+
+### Migration Best Practices
+
+1. **Always implement both `up()` and `down()`** — rollbacks should fully reverse the `up()` change.
+2. **Use descriptive names** — e.g., `add-user-avatar-field`, `create-topics-text-index`, `backfill-clause-vote-counts`.
+3. **Keep migrations small and focused** — one logical change per migration.
+4. **Use the native MongoDB driver** — migrations receive the raw `db` and `client` objects (not Mongoose). Use `db.collection()` for operations.
+5. **Test locally** — run `npm run migrate:up` and `npm run migrate:down` to verify both directions work.
+6. **Never edit applied migrations** — if a migration has been run in any environment, create a new migration to fix it.
+7. **Run migrations before starting the server** in deployment pipelines.
+
+### Configuration
+
+Migration configuration is in `migrate-mongo-config.mjs`. It reads `MONGODB_URI` from the `.env` file automatically.
+
+- **Migrations directory**: `src/migrations/`
+- **Changelog collection**: `changelog` (in MongoDB — tracks applied migrations)
+- **File extension**: `.js` (ES module format)
+
 ## Key Design Decisions
 
 - **Denormalized vote counts** — `agreeCount`/`disagreeCount` on Clause documents, updated with atomic `$inc`. No aggregation on read.
@@ -163,6 +231,10 @@ The server exposes a GraphQL endpoint at `/graphql`. Key domains:
 | `npm run lint` | Run ESLint |
 | `npm run test` | Run tests (Vitest) |
 | `npm run seed` | Seed database with initial data |
+| `npm run migrate:up` | Run pending database migrations |
+| `npm run migrate:down` | Rollback last migration |
+| `npm run migrate:status` | Check migration status |
+| `npm run migrate:create <name>` | Create a new migration file |
 
 ## Contributing
 
