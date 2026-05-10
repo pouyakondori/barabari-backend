@@ -37,6 +37,9 @@ export class CoordinatesType {
 
   @Field()
   lng: number;
+
+  @Field({ nullable: true })
+  zoom?: number;
 }
 
 @ObjectType()
@@ -70,6 +73,18 @@ export class CountryType {
 
   @Field(() => LocalizedStringType)
   abstract: LocalizedStringType;
+
+  @Field(() => Float, { nullable: true })
+  totalArea?: number;
+
+  @Field({ nullable: true })
+  landlocked?: boolean;
+
+  @Field(() => [String], { nullable: true })
+  borders?: string[];
+
+  @Field(() => [String], { nullable: true })
+  naturalResources?: string[];
 
   @Field(() => [AuthorType])
   authors: AuthorType[];

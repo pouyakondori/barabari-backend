@@ -17,6 +17,10 @@ export class CoordinatesInput {
 
   @Field()
   lng: number;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  zoom?: number;
 }
 
 @InputType()
@@ -75,6 +79,23 @@ export class CountryInput {
 
   @Field(() => CoordinatesInput)
   coordinates: CoordinatesInput;
+
+  @Field(() => Float, { nullable: true })
+  @IsOptional()
+  @Min(0)
+  totalArea?: number;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  landlocked?: boolean;
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  borders?: string[];
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  naturalResources?: string[];
 
   @Field({ nullable: true })
   @IsOptional()

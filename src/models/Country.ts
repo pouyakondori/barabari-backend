@@ -26,8 +26,12 @@ export interface ICountry extends Document {
   name: ILocalizedString;
   flag: string;
   population: number;
-  coordinates: { lat: number; lng: number };
+  coordinates: { lat: number; lng: number; zoom?: number };
   abstract: ILocalizedString;
+  totalArea?: number;
+  landlocked?: boolean;
+  borders?: string[];
+  naturalResources?: string[];
   authors: IAuthor[];
   amendments: IAmendment[];
   podcastUrl?: string;
@@ -88,8 +92,13 @@ const CountrySchema = new Schema<ICountry>(
     coordinates: {
       lat: { type: Number, required: true },
       lng: { type: Number, required: true },
+      zoom: { type: Number },
     },
     abstract: { type: LocalizedStringSchema, required: true },
+    totalArea: { type: Number },
+    landlocked: { type: Boolean, default: false },
+    borders: { type: [String], default: [] },
+    naturalResources: { type: [String], default: [] },
     authors: { type: [AuthorSchema], default: [] },
     amendments: { type: [AmendmentSchema], default: [] },
     podcastUrl: { type: String },

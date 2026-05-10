@@ -86,11 +86,15 @@ async function seed() {
     name: { fa: "پرتغال", en: "Portugal" },
     flag: "🇵🇹",
     population: 10_340_000,
-    coordinates: { lat: 38.7223, lng: -9.1393 },
+    coordinates: { lat: 38.7223, lng: -9.1393, zoom: 6 },
     abstract: {
       fa: "قانون اساسی جمهوری پرتغال در سال ۱۹۷۶ پس از انقلاب گل میخک تصویب شد و چارچوب یک دموکراسی پارلمانی را ایجاد کرد.",
       en: "The Constitution of the Portuguese Republic was adopted in 1976 following the Carnation Revolution, establishing a parliamentary democracy framework.",
     },
+    totalArea: 92212,
+    landlocked: false,
+    borders: ["spain"],
+    naturalResources: ["Cork", "Lithium", "Tungsten", "Tin", "Fish"],
     authors: [
       {
         name: "Constituent Assembly of Portugal",
@@ -125,11 +129,15 @@ async function seed() {
     name: { fa: "آلمان", en: "Germany" },
     flag: "🇩🇪",
     population: 84_360_000,
-    coordinates: { lat: 52.52, lng: 13.405 },
+    coordinates: { lat: 52.52, lng: 13.405, zoom: 5 },
     abstract: {
       fa: "قانون اساسی آلمان (گروندگزتز) در سال ۱۹۴۹ تصویب شد و پایه‌های یک دموکراسی فدرال پارلمانی را بنا نهاد.",
       en: "The German Basic Law (Grundgesetz) was adopted in 1949, establishing the foundations of a federal parliamentary democracy.",
     },
+    totalArea: 357022,
+    landlocked: false,
+    borders: ["denmark", "poland", "czech-republic", "austria", "switzerland", "france", "luxembourg", "belgium", "netherlands"],
+    naturalResources: ["Iron Ore", "Coal", "Potash", "Timber", "Natural Gas", "Lignite"],
     authors: [
       {
         name: "Parliamentary Council (Parlamentarischer Rat)",
