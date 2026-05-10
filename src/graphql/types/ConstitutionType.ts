@@ -2,12 +2,30 @@ import { ObjectType, Field, ID } from "type-graphql";
 import { LocalizedStringType } from "./CountryType";
 
 @ObjectType()
+export class ConstitutionCountryType {
+  @Field(() => ID)
+  id: string;
+
+  @Field(() => LocalizedStringType)
+  name: LocalizedStringType;
+
+  @Field()
+  slug: string;
+}
+
+@ObjectType()
 export class ConstitutionType {
   @Field(() => ID)
   id: string;
 
   @Field()
   countryId: string;
+
+  @Field(() => ConstitutionCountryType, { nullable: true })
+  country?: ConstitutionCountryType;
+
+  @Field({ nullable: true })
+  pdfUrl?: string;
 
   @Field()
   fullTextUrl: string;

@@ -8,6 +8,31 @@ import { Country } from "../../models/Country";
 
 @Resolver()
 export class ConstitutionResolver {
+  @Query(() => [ConstitutionType])
+  async constitutions(): Promise<ConstitutionType[]> {
+    const constitutions = await Constitution.find().lean();
+    const countryIds = constitutions.map((c) => c.countryId);
+    const countries = await Country.find({ _id: { $in: countryIds } }).lean();
+    const countryMap = new Map(countries.map((c) => [c._id.toString(), c]));
+
+    return constitutions.map((c) => {
+      const country = countryMap.get(c.countryId.toString());
+      return {
+        id: c._id.toString(),
+        countryId: c.countryId.toString(),
+        country: country ? {
+          id: country._id.toString(),
+          name: country.name,
+          slug: country.slug,
+        } : undefined,
+        pdfUrl: c.fullTextUrl,
+        fullTextUrl: c.fullTextUrl,
+        chapters: [],
+        createdAt: c.createdAt,
+      };
+    });
+  }
+
   @Query(() => ConstitutionType, { nullable: true })
   async constitution(@Arg("countrySlug") countrySlug: string): Promise<ConstitutionType | null> {
     const country = await Country.findOne({ slug: countrySlug.toLowerCase() }).lean();
@@ -73,6 +98,12 @@ export class ConstitutionResolver {
     return {
       id: constitution._id.toString(),
       countryId: constitution.countryId.toString(),
+      country: {
+        id: country._id.toString(),
+        name: country.name,
+        slug: country.slug,
+      },
+      pdfUrl: constitution.fullTextUrl,
       fullTextUrl: constitution.fullTextUrl,
       chapters: mappedChapters,
       createdAt: constitution.createdAt,
