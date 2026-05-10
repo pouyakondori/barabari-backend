@@ -1,4 +1,4 @@
-import { Resolver, Query, Arg, Int } from "type-graphql";
+import { Resolver, Query, Arg, Int, ID } from "type-graphql";
 import { CountryType } from "../types/CountryType";
 import { Country } from "../../models/Country";
 
@@ -32,6 +32,13 @@ export class CountryResolver {
     return mapCountry(doc);
   }
 
+  @Query(() => CountryType, { nullable: true })
+  async countryById(@Arg("id", () => ID) id: string): Promise<CountryType | null> {
+    const doc = await Country.findById(id).lean();
+    if (!doc) return null;
+    return mapCountry(doc);
+  }
+
   @Query(() => [CountryType])
   async searchCountries(@Arg("query") query: string): Promise<CountryType[]> {
     const regex = new RegExp(query, "i");
@@ -59,6 +66,15 @@ function mapCountry(doc: any): CountryType {
     podcastUrl: doc.podcastUrl,
     videoUrl: doc.videoUrl,
     countryCode: doc.countryCode,
+    systemOfGovernment: doc.systemOfGovernment,
+    hdi: doc.hdi,
+    independenceDate: doc.independenceDate,
+    officialLanguages: doc.officialLanguages || [],
+    gdp: doc.gdp,
+    economicType: doc.economicType,
+    religiousComposition: doc.religiousComposition || [],
+    urbanizationRate: doc.urbanizationRate,
+    corruptionIndex: doc.corruptionIndex,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
   };

@@ -103,6 +103,19 @@ async function seed() {
       { year: 2005, description: { fa: "اصلاحیه برای رفراندوم اروپایی", en: "Amendment for European referendum" } },
     ],
     countryCode: "PT",
+    systemOfGovernment: "Semi-Presidential Republic",
+    hdi: 0.874,
+    independenceDate: "1143-10-05",
+    officialLanguages: ["Portuguese"],
+    gdp: "$287.1 billion",
+    economicType: "High-Income Economy",
+    religiousComposition: [
+      { religion: "Christianity", percentage: 80.2 },
+      { religion: "No Religion", percentage: 16.7 },
+      { religion: "Other", percentage: 3.1 },
+    ],
+    urbanizationRate: 67.4,
+    corruptionIndex: 61,
   });
   console.log("✅ Created country: Portugal");
 
@@ -129,6 +142,20 @@ async function seed() {
       { year: 2009, description: { fa: "ترمز بدهی", en: "Debt brake (Schuldenbremse) amendment" } },
     ],
     countryCode: "DE",
+    systemOfGovernment: "Federal Parliamentary Republic",
+    hdi: 0.95,
+    independenceDate: "1871-01-18",
+    officialLanguages: ["German"],
+    gdp: "$4.46 trillion",
+    economicType: "High-Income Economy",
+    religiousComposition: [
+      { religion: "Christianity", percentage: 52.7 },
+      { religion: "No Religion", percentage: 42.0 },
+      { religion: "Islam", percentage: 3.5 },
+      { religion: "Other", percentage: 1.8 },
+    ],
+    urbanizationRate: 77.5,
+    corruptionIndex: 78,
   });
   console.log("✅ Created country: Germany");
 

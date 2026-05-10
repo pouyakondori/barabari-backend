@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, registerEnumType } from "type-graphql";
+import { ObjectType, Field, ID, Float, InputType, registerEnumType } from "type-graphql";
 
 @ObjectType()
 export class LocalizedStringType {
@@ -40,6 +40,15 @@ export class CoordinatesType {
 }
 
 @ObjectType()
+export class ReligiousCompositionType {
+  @Field()
+  religion: string;
+
+  @Field(() => Float)
+  percentage: number;
+}
+
+@ObjectType()
 export class CountryType {
   @Field(() => ID)
   id: string;
@@ -76,6 +85,33 @@ export class CountryType {
 
   @Field()
   countryCode: string;
+
+  @Field({ nullable: true })
+  systemOfGovernment?: string;
+
+  @Field(() => Float, { nullable: true })
+  hdi?: number;
+
+  @Field({ nullable: true })
+  independenceDate?: string;
+
+  @Field(() => [String], { nullable: true })
+  officialLanguages?: string[];
+
+  @Field({ nullable: true })
+  gdp?: string;
+
+  @Field({ nullable: true })
+  economicType?: string;
+
+  @Field(() => [ReligiousCompositionType], { nullable: true })
+  religiousComposition?: ReligiousCompositionType[];
+
+  @Field(() => Float, { nullable: true })
+  urbanizationRate?: number;
+
+  @Field(() => Float, { nullable: true })
+  corruptionIndex?: number;
 
   @Field()
   createdAt: Date;

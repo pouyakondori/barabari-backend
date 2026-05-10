@@ -16,6 +16,11 @@ export interface IAmendment {
   description: ILocalizedString;
 }
 
+export interface IReligiousComposition {
+  religion: string;
+  percentage: number;
+}
+
 export interface ICountry extends Document {
   slug: string;
   name: ILocalizedString;
@@ -28,6 +33,15 @@ export interface ICountry extends Document {
   podcastUrl?: string;
   videoUrl?: string;
   countryCode: string;
+  systemOfGovernment?: string;
+  hdi?: number;
+  independenceDate?: string;
+  officialLanguages?: string[];
+  gdp?: string;
+  economicType?: string;
+  religiousComposition?: IReligiousComposition[];
+  urbanizationRate?: number;
+  corruptionIndex?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -57,6 +71,14 @@ const AmendmentSchema = new Schema<IAmendment>(
   { _id: false }
 );
 
+const ReligiousCompositionSchema = new Schema<IReligiousComposition>(
+  {
+    religion: { type: String, required: true },
+    percentage: { type: Number, required: true },
+  },
+  { _id: false }
+);
+
 const CountrySchema = new Schema<ICountry>(
   {
     slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
@@ -73,6 +95,15 @@ const CountrySchema = new Schema<ICountry>(
     podcastUrl: { type: String },
     videoUrl: { type: String },
     countryCode: { type: String, required: true, uppercase: true },
+    systemOfGovernment: { type: String },
+    hdi: { type: Number },
+    independenceDate: { type: String },
+    officialLanguages: { type: [String], default: [] },
+    gdp: { type: String },
+    economicType: { type: String },
+    religiousComposition: { type: [ReligiousCompositionSchema], default: [] },
+    urbanizationRate: { type: Number },
+    corruptionIndex: { type: Number },
   },
   { timestamps: true }
 );
