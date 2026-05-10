@@ -34,6 +34,7 @@ This repository contains the **backend API** — a GraphQL server that handles:
 | [Redis](https://redis.io/) + [ioredis](https://github.com/redis/ioredis) | Caching (stats, rankings, heatmaps) |
 | [JSON Web Tokens](https://jwt.io/) | Authentication |
 | [multer](https://github.com/expressjs/multer) | File upload handling |
+| [MinIO](https://min.io/) | Object storage for podcast audio files |
 | [class-validator](https://github.com/typestack/class-validator) | Input validation |
 | [dataloader](https://github.com/graphql/dataloader) | N+1 query prevention |
 | [Pino](https://getpino.io/) | Structured logging |
@@ -99,6 +100,14 @@ CORS_ORIGIN=http://localhost:3000
 
 UPLOADS_DIR=./uploads
 MAX_FILE_SIZE_MB=50
+
+# MinIO Storage
+MINIO_ENDPOINT=localhost
+MINIO_PORT=9000
+MINIO_USE_SSL=false
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+MINIO_BUCKET=podcasts
 ```
 
 ### Docker
@@ -140,11 +149,20 @@ The server exposes a GraphQL endpoint at `/graphql`. Key domains:
 | Votes | `myVotes` | `castVote`, `removeVote` |
 | Comments | `comments` | `createComment`, `updateComment`, `deleteComment` |
 | Topics | `topics`, `topic`, `comparisonTable`, `heatmapData`, `topicFacts` | — |
-| Podcasts | `podcasts`, `podcast` | — |
+| Podcasts | `podcasts`, `podcastsByCountry` | — |
 | Sandbox | `mySandboxes`, `sandbox` | `createSandbox`, `updateSandbox`, `deleteSandbox` |
 | Stats | `platformStats`, `featuredCountries` | — |
 | Chat | — | `chat` (+ REST `POST /api/chat` for streaming) |
-| Admin | `adminStats`, `adminUsers`, `adminComments`, ... | `adminApproveComment`, `adminCreateCountry`, ... |
+| Admin | `adminStats`, `adminUsers`, `adminComments`, `adminPodcasts`, `adminPodcast` | `adminApproveComment`, `adminCreateCountry`, `adminCreatePodcast`, `adminUpdatePodcast`, `adminDeletePodcast`, ... |
+
+### REST Endpoints
+
+In addition to GraphQL, the server exposes REST endpoints for file operations:
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/admin/podcasts/upload` | Admin JWT | Upload audio file to MinIO. Returns `{ url, objectName, originalName, size }` |
+| `GET` | `/podcasts/stream/:objectName` | Public | Stream audio from MinIO with range request support |
 
 ## Database Migrations
 
@@ -219,6 +237,7 @@ Migration configuration is in `migrate-mongo-config.mjs`. It reads `MONGODB_URI`
 - **Redis caching** — Platform stats (5-min TTL), comparison rankings (invalidated on vote, debounced 30s), heatmap data (15-min refresh).
 - **Comment approval** — All comments start as `pending`. Only admin-approved comments are public. Edits reset to `pending`.
 - **Local file storage** — All uploads in `uploads/` directory, served via Express static at `/files/`.
+- **MinIO object storage** — Podcast audio files are stored in MinIO for reliable streaming with range request support.
 - **DataLoader** — Batches and deduplicates DB queries to prevent N+1 in nested resolvers.
 
 ## Scripts
