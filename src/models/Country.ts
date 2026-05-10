@@ -6,8 +6,8 @@ export interface ILocalizedString {
 }
 
 export interface IAuthor {
-  name: string;
-  bio: string;
+  name: ILocalizedString;
+  bio: ILocalizedString;
   imageUrl?: string;
 }
 
@@ -58,8 +58,8 @@ const LocalizedStringSchema = new Schema<ILocalizedString>(
 
 const AuthorSchema = new Schema<IAuthor>(
   {
-    name: { type: String, required: true },
-    bio: { type: String, required: true },
+    name: { type: LocalizedStringSchema, required: true },
+    bio: { type: LocalizedStringSchema, required: true },
     imageUrl: { type: String },
   },
   { _id: false }

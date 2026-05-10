@@ -25,12 +25,11 @@ export class CoordinatesInput {
 
 @InputType()
 export class AuthorInput {
-  @Field()
-  @MinLength(1)
-  name: string;
+  @Field(() => LocalizedStringInput)
+  name: LocalizedStringInput;
 
-  @Field()
-  bio: string;
+  @Field(() => LocalizedStringInput)
+  bio: LocalizedStringInput;
 
   @Field({ nullable: true })
   imageUrl?: string;

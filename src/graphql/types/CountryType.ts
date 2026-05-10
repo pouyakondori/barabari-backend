@@ -11,11 +11,11 @@ export class LocalizedStringType {
 
 @ObjectType()
 export class AuthorType {
-  @Field()
-  name: string;
+  @Field(() => LocalizedStringType)
+  name: LocalizedStringType;
 
-  @Field()
-  bio: string;
+  @Field(() => LocalizedStringType)
+  bio: LocalizedStringType;
 
   @Field({ nullable: true })
   imageUrl?: string;
