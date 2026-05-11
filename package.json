@@ -4,10 +4,11 @@
   "description": "GraphQL API server for the Barabari constitutional analysis platform",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node --swc src/index.ts",
+    "dev": "NODE_OPTIONS='--max-old-space-size=4096' ts-node --swc src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "ts-node --swc src/seed/seed.ts",
+    "seed:constitutions": "ts-node --swc src/seed/seedConstitutions.ts",
     "lint": "eslint src/",
     "test": "vitest",
     "migrate:up": "migrate-mongo up -f migrate-mongo-config.mjs",

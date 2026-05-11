@@ -31,6 +31,9 @@ src/
 ├── utils/                # Errors, pagination, file helpers
 ├── migrations/           # Database migration scripts (migrate-mongo)
 └── seed/                 # Database seed scripts & data
+    ├── seed.ts           # Main seed (topics, countries, sample data)
+    ├── seedConstitutions.ts  # Constitution seeder (reads JSON → MongoDB)
+    └── constitution-pipeline/  # PDF parsing tools, translations & JSON data
 ```
 
 ## Coding Conventions
@@ -82,6 +85,29 @@ src/
 - Use Vitest for all tests
 - Run tests with `npm run test`
 
+## Constitution PDF Import Pipeline
+
+The platform supports importing constitution laws from PDF files into the database with full bilingual (English/Persian) content. The pipeline lives in `src/seed/constitution-pipeline/` and follows these steps:
+
+1. **Parse PDF → JSON** (`parse_constitutions.py`): Extract structured hierarchy (Chapter → Article → Clause) from a constitution PDF using PyPDF2. Each country needs custom regex patterns — constitutions have wildly different formatting.
+2. **Add Persian titles** (`add_persian_titles.py`): Apply manually curated Persian translations for chapter and article titles via a dictionary lookup.
+3. **Translate clause text** (`translate_clauses.py`): Automated Google Translate (`deep-translator` library) for all clause body text. Handles rate limiting, long text splitting, and retries.
+4. **Seed database** (`npm run seed:constitutions`): TypeScript seed script (`src/seed/seedConstitutions.ts`) reads the JSON files, deletes existing data for the country, and inserts the full hierarchy with auto-assigned topic slugs.
+
+> **📖 Full documentation**: See `src/seed/constitution-pipeline/CONSTITUTION_PIPELINE.md` for the complete step-by-step guide, data model reference, parsing pitfalls (TOC detection, multiline titles, page header artifacts), and troubleshooting.
+
+### Key data model
+
+```
+Country → Constitution → Chapter → Article → Clause
+```
+
+All text fields use `ILocalizedString { fa: string; en: string }`. The Clause model requires both `text.fa` and `text.en` to be non-empty strings.
+
+### Memory considerations
+
+Loading 1000+ clauses with full bilingual text can exceed Node.js default heap. The dev script uses `NODE_OPTIONS='--max-old-space-size=4096'`. The `constitutions` list resolver uses `.select()` to load only IDs for the list view (not full text).
+
 ## Common Commands
 
 ```bash
@@ -91,6 +117,7 @@ npm run start        # Start production server
 npm run lint         # Run ESLint
 npm run test         # Run tests (Vitest)
 npm run seed         # Seed database with initial data
+npm run seed:constitutions  # Seed constitution data from parsed PDFs
 npm run migrate:up   # Run pending migrations
 npm run migrate:down # Rollback last migration
 npm run migrate:status  # Check migration status

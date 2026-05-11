@@ -58,6 +58,7 @@ npm run dev             # Start dev server at http://localhost:4000
 | `npm run lint` | ESLint |
 | `npm run test` | Vitest |
 | `npm run seed` | Seed database |
+| `npm run seed:constitutions` | Seed constitution data from parsed PDFs |
 | `npm run migrate:up` | Run pending migrations |
 | `npm run migrate:down` | Rollback last migration |
 | `npm run migrate:status` | Check migration status |

@@ -74,3 +74,19 @@ When implementing complex business logic:
 1. Create a service class in `src/services/` to encapsulate business rules
 2. Keep resolvers thin — they should delegate to services
 3. Use the service from the resolver via direct import (no DI container)
+
+## Skill: Import New Country Constitution
+
+When asked to add a new country's constitution to the platform:
+
+1. **Read the full pipeline guide**: `src/seed/constitution-pipeline/CONSTITUTION_PIPELINE.md`
+2. **Place the PDF** in `src/seed/constitution-pipeline/` named `{country}_constitution_law.pdf`
+3. **Write a parser**: Extend `parse_constitutions.py` or create a new parser function for the country. Each constitution has unique formatting — study the PDF text structure before writing regexes. Key pitfalls: TOC vs content detection (use `min_pos`), multiline article titles, page header artifacts, duplicate article numbers.
+4. **Add Persian titles**: Create a dictionary in `add_persian_titles.py` mapping article numbers to Persian translations.
+5. **Translate clause text**: Run `translate_clauses.py` on the generated JSON (requires `deep-translator` pip package).
+6. **Ensure country exists**: The country must be in the DB with matching `slug`. Use `src/seed/seed.ts` or create via migration.
+7. **Update seed script**: Add the new country to `src/seed/seedConstitutions.ts`.
+8. **Run seeding**: `npm run seed:constitutions`
+9. **Verify**: Check the constitutions list query returns correct counts, and the individual constitution query returns full bilingual text.
+
+**Expected JSON format**: Array of chapters, each with articles, each with clauses. All text fields have `{ en, fa }`. See existing JSON files as examples.

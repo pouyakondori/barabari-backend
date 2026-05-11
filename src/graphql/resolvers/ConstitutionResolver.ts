@@ -15,9 +15,69 @@ export class ConstitutionResolver {
     const countries = await Country.find({ _id: { $in: countryIds } }).lean();
     const countryMap = new Map(countries.map((c) => [c._id.toString(), c]));
 
-    return constitutions.map((c) => {
+    const results: ConstitutionType[] = [];
+
+    for (const c of constitutions) {
       const country = countryMap.get(c.countryId.toString());
-      return {
+
+      const chapters = await Chapter.find({ constitutionId: c._id })
+        .sort({ order: 1 })
+        .select("_id number title order")
+        .lean();
+
+      const chapterIds = chapters.map((ch) => ch._id);
+      const articles = await Article.find({ chapterId: { $in: chapterIds } })
+        .sort({ order: 1 })
+        .select("_id chapterId number title order")
+        .lean();
+
+      const articleIds = articles.map((a) => a._id);
+      const clauses = await Clause.find({ articleId: { $in: articleIds } })
+        .sort({ order: 1 })
+        .select("_id articleId number order countryId")
+        .lean();
+
+      // Group articles by chapterId
+      const articlesByChapter = new Map<string, any[]>();
+      for (const article of articles) {
+        const key = article.chapterId.toString();
+        if (!articlesByChapter.has(key)) articlesByChapter.set(key, []);
+        articlesByChapter.get(key)!.push(article);
+      }
+
+      // Group clauses by articleId
+      const clausesByArticle = new Map<string, any[]>();
+      for (const clause of clauses) {
+        const key = clause.articleId.toString();
+        if (!clausesByArticle.has(key)) clausesByArticle.set(key, []);
+        clausesByArticle.get(key)!.push(clause);
+      }
+
+      const mappedChapters: ChapterType[] = chapters.map((ch: any) => ({
+        id: ch._id.toString(),
+        number: ch.number,
+        title: ch.title,
+        order: ch.order,
+        articles: (articlesByChapter.get(ch._id.toString()) || []).map((art: any): ArticleType => ({
+          id: art._id.toString(),
+          number: art.number,
+          title: art.title,
+          order: art.order,
+          clauses: (clausesByArticle.get(art._id.toString()) || []).map((cl: any): ClauseType => ({
+            id: cl._id.toString(),
+            number: cl.number,
+            text: { fa: "", en: "" },
+            topicSlugs: [],
+            agreeCount: 0,
+            disagreeCount: 0,
+            order: cl.order,
+            countryId: cl.countryId?.toString() || "",
+            articleId: cl.articleId.toString(),
+          })),
+        })),
+      }));
+
+      results.push({
         id: c._id.toString(),
         countryId: c.countryId.toString(),
         country: country ? {
@@ -27,10 +87,12 @@ export class ConstitutionResolver {
         } : undefined,
         pdfUrl: c.fullTextUrl,
         fullTextUrl: c.fullTextUrl,
-        chapters: [],
+        chapters: mappedChapters,
         createdAt: c.createdAt,
-      };
-    });
+      });
+    }
+
+    return results;
   }
 
   @Query(() => ConstitutionType, { nullable: true })
