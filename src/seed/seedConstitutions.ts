@@ -40,66 +40,99 @@ function assignTopicSlugs(text: string): string[] {
   const lowerText = text.toLowerCase();
   const slugs: string[] = [];
 
-  if (
-    lowerText.includes("expression") ||
-    lowerText.includes("speech") ||
-    lowerText.includes("press") ||
-    lowerText.includes("opinion") ||
-    lowerText.includes("censorship") ||
-    lowerText.includes("media") ||
-    lowerText.includes("broadcast") ||
-    lowerText.includes("information")
-  ) {
-    slugs.push("freedom-of-speech");
-  }
+  const topicKeywords: Record<string, string[]> = {
+    "freedom-of-speech": [
+      "expression", "speech", "press", "opinion", "censorship",
+      "media", "broadcast", "information", "communicate", "publication",
+    ],
+    "freedom-of-religion": [
+      "religion", "faith", "conscience", "worship", "church",
+      "creed", "belief", "religious",
+    ],
+    "freedom-of-association": [
+      "association", "party", "parties", "union", "unions", "guild",
+      "assembly", "assemble", "organize", "collective bargaining",
+      "trade union", "political party",
+    ],
+    "right-to-life": [
+      "right to life", "dignity", "integrity", "death penalty",
+      "torture", "inviolable", "human rights", "cruel", "degrading",
+      "inhuman", "abolition of death",
+    ],
+    "citizenship-rights": [
+      "citizen", "citizenship", "nationality", "naturaliz", "national",
+      "expatriat", "stateless", "passport", "deportat",
+    ],
+    "presidential-election-procedure": [
+      "president", "presidential", "head of state", "elect the president",
+      "presidential election",
+    ],
+    "formation-of-parliament": [
+      "parliament", "legislature", "legislative", "congress", "bundestag",
+      "bundesrat", "assembly", "chamber", "deputy", "deputies",
+      "member of parliament", "senator", "representative",
+    ],
+    "formation-of-government": [
+      "government", "cabinet", "minister", "chancellor", "prime minister",
+      "executive power", "council of ministers",
+    ],
+    "fair-trial": [
+      "trial", "court", "judicial", "judge", "criminal",
+      "accused", "defence", "defense", "habeas corpus", "due process",
+      "presumption of innocence", "right to counsel",
+    ],
+    "operation-of-judiciary": [
+      "judiciary", "supreme court", "constitutional court", "prosecutor",
+      "magistrate", "tribunal", "judicial independence", "judicial review",
+      "jurisdiction",
+    ],
+    "operation-of-military-police": [
+      "military", "armed forces", "army", "navy", "air force",
+      "police", "law enforcement", "defense force", "national guard",
+      "martial law", "conscription", "military service",
+    ],
+    "right-to-education": [
+      "education", "school", "teaching", "learning", "university",
+      "instruction", "academic", "pupil", "student",
+    ],
+    "right-to-healthcare": [
+      "health", "healthcare", "medical", "hospital", "sanitary",
+      "disease", "public health", "social security",
+    ],
+    "right-to-housing": [
+      "housing", "home", "dwelling", "residence", "shelter",
+      "accommodation", "domicile", "habitation",
+    ],
+    "labor-rights": [
+      "labor", "labour", "worker", "employment", "wage",
+      "working condition", "strike", "trade union", "occupation",
+      "profession", "remuneration", "minimum wage",
+    ],
+    "voting-election-laws": [
+      "vote", "voting", "election", "ballot", "suffrage",
+      "referendum", "plebiscite", "electoral",
+    ],
+    "tax-laws": [
+      "tax", "taxation", "fiscal", "revenue", "levy",
+      "duty", "customs", "budget",
+    ],
+    "citizen-responsibilities": [
+      "duty", "obligation", "responsible", "responsibility",
+      "compulsory", "mandatory", "civic duty",
+    ],
+    "constitutional-amendment-procedures": [
+      "amendment", "amend", "revision", "revise", "constitutional reform",
+      "constitutional review", "modify the constitution",
+    ],
+  };
 
-  if (
-    lowerText.includes("education") ||
-    lowerText.includes("school") ||
-    lowerText.includes("teaching") ||
-    lowerText.includes("learning") ||
-    lowerText.includes("university") ||
-    lowerText.includes("instruction")
-  ) {
-    slugs.push("right-to-education");
-  }
-
-  if (
-    lowerText.includes("life") ||
-    lowerText.includes("dignity") ||
-    lowerText.includes("integrity") ||
-    lowerText.includes("death") ||
-    lowerText.includes("torture") ||
-    lowerText.includes("inviolable") ||
-    lowerText.includes("human rights")
-  ) {
-    slugs.push("right-to-life");
-  }
-
-  if (
-    lowerText.includes("trial") ||
-    lowerText.includes("court") ||
-    lowerText.includes("judicial") ||
-    lowerText.includes("judge") ||
-    lowerText.includes("justice") ||
-    lowerText.includes("criminal") ||
-    lowerText.includes("accused") ||
-    lowerText.includes("defence") ||
-    lowerText.includes("habeas corpus")
-  ) {
-    slugs.push("fair-trial");
-  }
-
-  if (
-    lowerText.includes("religion") ||
-    lowerText.includes("faith") ||
-    lowerText.includes("conscience") ||
-    lowerText.includes("worship") ||
-    lowerText.includes("church") ||
-    lowerText.includes("creed") ||
-    lowerText.includes("belief")
-  ) {
-    slugs.push("freedom-of-religion");
+  for (const [slug, keywords] of Object.entries(topicKeywords)) {
+    for (const keyword of keywords) {
+      if (lowerText.includes(keyword)) {
+        slugs.push(slug);
+        break;
+      }
+    }
   }
 
   return slugs;

@@ -27,6 +27,7 @@ async function seed() {
 
   // --- Topics ---
   const topics = await Topic.insertMany([
+    // fundamental-rights
     {
       slug: "freedom-of-speech",
       name: { fa: "آزادی بیان", en: "Freedom of Speech" },
@@ -38,14 +39,24 @@ async function seed() {
       order: 1,
     },
     {
-      slug: "right-to-education",
-      name: { fa: "حق آموزش", en: "Right to Education" },
-      category: "social-economic",
+      slug: "freedom-of-religion",
+      name: { fa: "ادیان", en: "Religions" },
+      category: "fundamental-rights",
       description: {
-        fa: "حق دسترسی به آموزش رایگان و با کیفیت",
-        en: "The right to access free and quality education",
+        fa: "حق آزادی عقیده و مذهب",
+        en: "The right to freedom of belief and religion",
       },
       order: 2,
+    },
+    {
+      slug: "freedom-of-association",
+      name: { fa: "انجمنی (احزاب، اصناف، سندیکا)", en: "Freedom of Association (Parties, Guilds, Unions)" },
+      category: "fundamental-rights",
+      description: {
+        fa: "حق تشکیل و عضویت در احزاب، اصناف و سندیکاها",
+        en: "The right to form and join parties, guilds, and unions",
+      },
+      order: 3,
     },
     {
       slug: "right-to-life",
@@ -55,27 +66,167 @@ async function seed() {
         fa: "حق حیات و امنیت شخصی",
         en: "The right to life and personal security",
       },
-      order: 3,
+      order: 4,
     },
     {
+      slug: "citizenship-rights",
+      name: { fa: "حقوق شهروندی", en: "Citizenship Rights" },
+      category: "fundamental-rights",
+      description: {
+        fa: "حقوق مرتبط با تابعیت و شهروندی",
+        en: "Rights related to nationality and citizenship",
+      },
+      order: 5,
+    },
+
+    // power-distribution
+    {
+      slug: "presidential-election-procedure",
+      name: { fa: "چگونگی انتخاب رئیس جمهور", en: "Presidential Election Procedure" },
+      category: "power-distribution",
+      description: {
+        fa: "فرآیند و نحوه انتخاب رئیس جمهور",
+        en: "The process and procedure of presidential elections",
+      },
+      order: 1,
+    },
+    {
+      slug: "formation-of-parliament",
+      name: { fa: "چگونگی تشکیل پارلمان", en: "Formation of Parliament" },
+      category: "power-distribution",
+      description: {
+        fa: "ساختار و نحوه تشکیل پارلمان",
+        en: "The structure and formation of parliament",
+      },
+      order: 2,
+    },
+    {
+      slug: "formation-of-government",
+      name: { fa: "چگونگی تشکیل دولت", en: "Formation of Government" },
+      category: "power-distribution",
+      description: {
+        fa: "ساختار و نحوه تشکیل دولت",
+        en: "The structure and formation of government",
+      },
+      order: 3,
+    },
+
+    // rights-justice
+    {
       slug: "fair-trial",
-      name: { fa: "دادرسی عادلانه", en: "Right to a Fair Trial" },
+      name: { fa: "حق برخورداری از محاکمه عادلانه", en: "Right to a Fair Trial" },
       category: "rights-justice",
       description: {
         fa: "حق برخورداری از دادرسی عادلانه و منصفانه",
         en: "The right to a fair and impartial trial",
       },
-      order: 4,
+      order: 1,
     },
     {
-      slug: "freedom-of-religion",
-      name: { fa: "آزادی مذهب", en: "Freedom of Religion" },
-      category: "fundamental-rights",
+      slug: "operation-of-judiciary",
+      name: { fa: "نحوه فعالیت قوه قضائیه", en: "Operation of the Judiciary" },
+      category: "rights-justice",
       description: {
-        fa: "حق آزادی عقیده و مذهب",
-        en: "The right to freedom of belief and religion",
+        fa: "ساختار و عملکرد دستگاه قضایی",
+        en: "The structure and operation of the judicial system",
       },
-      order: 5,
+      order: 2,
+    },
+    {
+      slug: "operation-of-military-police",
+      name: { fa: "نحوه فعالیت نیروهای نظامی و پلیس", en: "Operation of Military and Police Forces" },
+      category: "rights-justice",
+      description: {
+        fa: "نحوه فعالیت و نظارت بر نیروهای نظامی و انتظامی",
+        en: "The operation and oversight of military and law enforcement forces",
+      },
+      order: 3,
+    },
+
+    // social-economic
+    {
+      slug: "right-to-education",
+      name: { fa: "حق آموزش", en: "Right to Education" },
+      category: "social-economic",
+      description: {
+        fa: "حق دسترسی به آموزش رایگان و با کیفیت",
+        en: "The right to access free and quality education",
+      },
+      order: 1,
+    },
+    {
+      slug: "right-to-healthcare",
+      name: { fa: "حق دسترسی به بهداشت", en: "Right to Healthcare" },
+      category: "social-economic",
+      description: {
+        fa: "حق دسترسی به خدمات بهداشتی و درمانی",
+        en: "The right to access health and medical services",
+      },
+      order: 2,
+    },
+    {
+      slug: "right-to-housing",
+      name: { fa: "حق مسکن", en: "Right to Housing" },
+      category: "social-economic",
+      description: {
+        fa: "حق برخورداری از مسکن مناسب",
+        en: "The right to adequate housing",
+      },
+      order: 3,
+    },
+    {
+      slug: "labor-rights",
+      name: { fa: "حقوق کارگر", en: "Labor Rights" },
+      category: "social-economic",
+      description: {
+        fa: "حقوق مرتبط با کار، دستمزد و شرایط کاری",
+        en: "Rights related to work, wages, and working conditions",
+      },
+      order: 4,
+    },
+
+    // civic-duties
+    {
+      slug: "voting-election-laws",
+      name: { fa: "قوانین رای‌گیری و انتخابات", en: "Voting and Election Laws" },
+      category: "civic-duties",
+      description: {
+        fa: "قوانین مرتبط با رای‌گیری و فرآیند انتخابات",
+        en: "Laws related to voting and the electoral process",
+      },
+      order: 1,
+    },
+    {
+      slug: "tax-laws",
+      name: { fa: "قوانین مالیاتی", en: "Tax Laws" },
+      category: "civic-duties",
+      description: {
+        fa: "قوانین مرتبط با مالیات و تعهدات مالی شهروندان",
+        en: "Laws related to taxation and citizens' financial obligations",
+      },
+      order: 2,
+    },
+    {
+      slug: "citizen-responsibilities",
+      name: { fa: "مسئولیت‌های شهروند", en: "Citizen Responsibilities" },
+      category: "civic-duties",
+      description: {
+        fa: "وظایف و مسئولیت‌های مدنی شهروندان",
+        en: "Civic duties and responsibilities of citizens",
+      },
+      order: 3,
+    },
+
+    // constitutional-revision
+    {
+      slug: "constitutional-amendment-procedures",
+      name: { fa: "چگونگی اصلاح یا بروزرسانی قانون اساسی", en: "Constitutional Amendment Procedures" },
+      category: "constitutional-revision",
+      description: {
+        fa: "فرآیند اصلاح و بازنگری قانون اساسی",
+        en: "The process of amending and revising the constitution",
+      },
+      order: 1,
     },
   ]);
   console.log(`✅ Created ${topics.length} topics`);

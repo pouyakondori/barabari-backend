@@ -20,4 +20,22 @@ export class TopicType {
 
   @Field()
   order: number;
+
+  @Field({ nullable: true })
+  clauseCount?: number;
+}
+
+@ObjectType()
+export class PaginatedTopicResult {
+  @Field(() => [TopicType])
+  items: TopicType[];
+
+  @Field()
+  total: number;
+
+  @Field()
+  limit: number;
+
+  @Field()
+  offset: number;
 }
