@@ -24,6 +24,7 @@ import { AdminUserResolver } from "./graphql/resolvers/AdminUserResolver";
 import { AdminCountryResolver } from "./graphql/resolvers/AdminCountryResolver";
 import { AdminPodcastResolver } from "./graphql/resolvers/AdminPodcastResolver";
 import { AdminTopicResolver } from "./graphql/resolvers/AdminTopicResolver";
+import { AdminCommentResolver } from "./graphql/resolvers/AdminCommentResolver";
 
 const REST_PORT = env.REST_PORT; // 4001
 
@@ -57,6 +58,7 @@ async function bootstrap() {
       AdminCountryResolver,
       AdminPodcastResolver,
       AdminTopicResolver,
+      AdminCommentResolver,
     ],
     authChecker,
     validate: true,
